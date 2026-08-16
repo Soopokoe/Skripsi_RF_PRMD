@@ -1,0 +1,13 @@
+exercise_code,exercise_name,label_name,base_augmentation,file_count
+m01,Deep Squat,Correct,original,100
+m01,Deep Squat,Incorrect,original,100
+m04,Side Lunge,Correct,flip_lr,100
+m04,Side Lunge,Correct,original,100
+m04,Side Lunge,Incorrect,flip_lr,100
+m04,Side Lunge,Incorrect,original,100
+m05,Sit to Stand,Correct,original,100
+m05,Sit to Stand,Incorrect,original,100
+m07,Standing Shoulder Abduction,Correct,flip_lr,100
+m07,Standing Shoulder Abduction,Correct,original,100
+m07,Standing Shoulder Abduction,Incorrect,flip_lr,100
+m07,Standing Shoulder Abduction,Incorrect,original,100

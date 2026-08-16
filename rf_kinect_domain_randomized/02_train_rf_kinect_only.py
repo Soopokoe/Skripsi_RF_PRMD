@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 import joblib
@@ -12,6 +13,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix
 from sklearn.model_selection import StratifiedGroupKFold
+
+MODULE_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = MODULE_DIR.parent
+sys.path.insert(0, str(PROJECT_DIR))
 
 from rf_calibration import calibrated_probability, choose_balanced_threshold, logit
 
@@ -60,7 +65,7 @@ def build_rf(seed=42, trees=800):
 
 
 def main():
-    module_dir = Path(__file__).resolve().parent
+    module_dir = MODULE_DIR
     parser = argparse.ArgumentParser(description="RF Kinect-only dengan OOF probability calibration.")
     project_dir = module_dir.parent
     parser.add_argument(

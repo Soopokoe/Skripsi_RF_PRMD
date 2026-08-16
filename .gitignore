@@ -4,8 +4,6 @@ __pycache__/
 .pytest_cache/
 .streamlit/secrets.toml
 
-dataset/
-dataset_augmented*/
 Video/
 videos/
 uploads/
@@ -15,6 +13,4 @@ outputs/
 backups/
 *.zip
 
-rf_kinect_domain_randomized/static/generated/*
-!rf_kinect_domain_randomized/static/generated/.gitkeep
 artifacts_uiprmd_fk/video_test_results*.json

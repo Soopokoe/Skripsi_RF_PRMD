@@ -1,14 +1,14 @@
 @echo off
+cd /d "%~dp0"
 if not exist .venv (
     python -m venv .venv
 )
 
-call .venv\Scripts\activate.bat
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+.venv\Scripts\python.exe -m pip install --upgrade pip
+.venv\Scripts\python.exe -m pip install -r requirements.txt
 
 echo.
 echo VENV selesai dibuat dan package sudah di-install.
-echo Aktifkan ulang dengan:
-echo .venv\Scripts\activate.bat
+echo Jalankan aplikasi dengan:
+echo .venv\Scripts\python.exe app.py
 pause

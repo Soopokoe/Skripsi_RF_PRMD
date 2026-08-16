@@ -34,7 +34,7 @@ def main():
     parser.add_argument("--max-files", type=int)
     parser.add_argument(
         "--repetitions-per-subject-label", type=int, default=5,
-        help="Sampling seimbang; 5 memakai 500 dari 1000 rekaman sambil mempertahankan semua subjek.",
+        help="Sampling seimbang; 5 memakai 400 rekaman aktif sambil mempertahankan semua subjek.",
     )
     args = parser.parse_args()
 

@@ -50,17 +50,17 @@ dan subjek: total 400 rekaman asli dengan semua 10 subjek tetap terwakili. Gunak
 `--repetitions-per-subject-label 10` bila ingin memproses seluruh 800 rekaman.
 
 Model aktif dan metrik tersimpan di folder `artifacts_uiprmd_fk` pada root
-repository agar dipakai bersama oleh aplikasi Flask dan Streamlit.
+repository dan digunakan oleh aplikasi Streamlit `app.py`.
 
-## Menjalankan aplikasi web
+## Menjalankan aplikasi
 
 Dari root project:
 
 ```powershell
-.\.venv\Scripts\python.exe rf_kinect_domain_randomized\app.py
+.\.venv\Scripts\python.exe app.py
 ```
 
-Kemudian buka `http://127.0.0.1:5001`. Model dan calibrator sudah tersedia di
+Kemudian buka `http://127.0.0.1:8501`. Model dan calibrator sudah tersedia di
 `artifacts_uiprmd_fk/models` pada root repository.
 
 Setelah analisis, aplikasi menampilkan tiga keyframe setiap repetisi (awal, fase

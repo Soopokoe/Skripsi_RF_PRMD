@@ -73,6 +73,9 @@ def main():
         if selected and exercise not in selected:
             continue
         for path in paths:
+            if not path.exists():
+                print(f"Lewati video yang tidak tersedia: {path}")
+                continue
             if name_filters and not any(token in path.name.lower() for token in name_filters):
                 continue
             _, _, _, _, _, diagnostics, candidates = video_to_visibility_aware_pattern(path, exercise, 80)

@@ -1,9 +1,13 @@
 # MotionLens RF — Kinect UI-PRMD
 
-Repository ringan untuk klasifikasi kualitas gerakan **Correct/Incorrect** dari
-video menggunakan MediaPipe Pose dan Random Forest. Model, calibrator, dan
-threshold dilatih dari skeleton Kinect UI-PRMD. Video upload hanya digunakan
-untuk inferensi dan tidak mengubah model.
+Project ini memakai **satu aplikasi saja**, yaitu `app.py`. File yang sama dapat
+dijalankan pada komputer lokal dan dipakai sebagai main file di Streamlit
+Community Cloud. Keduanya dapat aktif bersamaan karena berjalan sebagai instance
+terpisah dengan model yang sama.
+
+Model aktif adalah Random Forest yang dilatih dari skeleton Kinect UI-PRMD.
+MediaPipe mengubah video upload menjadi pola pose untuk inferensi. Video pengguna
+tidak dipakai untuk training atau untuk mengubah threshold.
 
 ## Gerakan aktif
 
@@ -14,56 +18,70 @@ untuk inferensi dan tidak mengubah model.
 | `m05` | Sit to Stand |
 | `m07` | Standing Shoulder Abduction |
 
-Hurdle Step (`m02`) tidak disertakan pada kode gerakan aktif, data fitur,
-indeks model, model RF, calibrator, maupun antarmuka.
+M02 Hurdle Step tidak terdapat pada aplikasi, dataset yang diunggah, dataset
+fitur, indeks model, model RF, maupun calibrator.
 
-## Menjalankan secara lokal
+## Menjalankan setelah download
 
-Gunakan Python 3.12. Dari PowerShell pada root repository:
+Gunakan Python 3.12. Dari PowerShell pada root project, pasang dependensi satu
+kali:
 
 ```powershell
 .\setup_venv_windows.ps1
 ```
 
-Aplikasi Streamlit:
+Setelah selesai, jalankan langsung satu aplikasi:
 
 ```powershell
-.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
+.\.venv\Scripts\python.exe app.py
 ```
 
-Buka `http://127.0.0.1:8501`.
-
-Aplikasi Flask:
-
-```powershell
-.\.venv\Scripts\python.exe rf_kinect_domain_randomized\app.py
-```
-
-Buka `http://127.0.0.1:5001`.
+`app.py` otomatis menjalankan Streamlit dan dapat dibuka melalui
+`http://127.0.0.1:8501`. Tidak ada aplikasi Flask atau file run batch terpisah.
 
 ## Deployment Streamlit Community Cloud
 
-1. Push seluruh isi repository ini ke GitHub.
-2. Buat aplikasi baru di Streamlit Community Cloud.
-3. Pilih repository dan branch `main`.
-4. Isi **Main file path** dengan `streamlit_app.py`.
-5. Gunakan Python 3.12 jika pilihan versi Python ditampilkan, lalu deploy.
+1. Pilih repository ini dan branch `main`.
+2. Isi **Main file path** dengan `app.py`.
+3. Gunakan Python 3.12 jika pilihan versi Python tersedia.
+4. Deploy.
 
-`packages.txt` dan `.streamlit/config.toml` sudah disertakan. Dataset mentah,
-video, `.venv`, cache, serta file hasil analisis tidak perlu diunggah.
+Instance lokal tetap dapat dijalankan dengan perintah di atas meskipun instance
+Streamlit Cloud sedang aktif.
 
-## Struktur file yang diunggah
+## Training ulang
+
+Dataset Kinect Positions dan Angles untuk empat gerakan aktif sudah disertakan,
+termasuk kelas Correct dan Incorrect. Indeks preprocessing juga tersedia.
+
+Membangun ulang dataset fitur:
+
+```powershell
+.\.venv\Scripts\python.exe rf_kinect_domain_randomized\01_build_randomized_features.py
+```
+
+Melatih ulang Random Forest, calibrator, dan threshold:
+
+```powershell
+.\.venv\Scripts\python.exe rf_kinect_domain_randomized\02_train_rf_kinect_only.py
+```
+
+Perintah training akan menimpa artefak aktif. Commit repository sudah membawa
+model siap pakai, sehingga training ulang tidak diperlukan untuk menjalankan app.
+
+## Struktur repository
 
 ```text
 Skripsi_RF_PRMD/
+|-- app.py
 |-- README.md
 |-- requirements.txt
 |-- packages.txt
 |-- .python-version
 |-- .gitignore
+|-- .gitattributes
 |-- setup_venv_windows.ps1
 |-- setup_venv_windows.bat
-|-- streamlit_app.py
 |-- pose_pattern_utils.py
 |-- video_extractor.py
 |-- input_adapter.py
@@ -73,60 +91,42 @@ Skripsi_RF_PRMD/
 |-- .streamlit/
 |   `-- config.toml
 |
+|-- dataset/
+|   |-- Correct/Segmented Movements/Kinect/
+|   |   |-- Positions/    # m01, m04, m05, m07
+|   |   `-- Angles/       # m01, m04, m05, m07
+|   `-- Incorrect/Incorrect Segmented Movements/Kinect/
+|       |-- Positions/    # m01, m04, m05, m07
+|       `-- Angles/       # m01, m04, m05, m07
+|
+|-- dataset_augmented_rf_xgb_fixed/
+|   |-- augmented_index.csv
+|   `-- augmented_index_summary.csv
+|
 |-- artifacts_uiprmd_fk/
 |   |-- kinect_domain_randomized_features.csv
 |   |-- kinect_domain_randomized_features_summary.csv
 |   `-- models/
 |       |-- model_index.json
 |       |-- training_metrics.json
-|       |-- rf_m01_standard.joblib
-|       |-- rf_m01_one_side.joblib
-|       |-- rf_m04_standard.joblib
-|       |-- rf_m04_one_side.joblib
-|       |-- rf_m05_standard.joblib
-|       |-- rf_m05_one_side.joblib
-|       |-- rf_m07_standard.joblib
-|       |-- rf_m07_one_side.joblib
-|       |-- calibrator_m01_standard.joblib
-|       |-- calibrator_m01_one_side.joblib
-|       |-- calibrator_m04_standard.joblib
-|       |-- calibrator_m04_one_side.joblib
-|       |-- calibrator_m05_standard.joblib
-|       |-- calibrator_m05_one_side.joblib
-|       |-- calibrator_m07_standard.joblib
-|       `-- calibrator_m07_one_side.joblib
+|       |-- rf_m{01,04,05,07}_{standard,one_side}.joblib
+|       `-- calibrator_m{01,04,05,07}_{standard,one_side}.joblib
 |
 `-- rf_kinect_domain_randomized/
     |-- README.md
     |-- 01_build_randomized_features.py
     |-- domain_randomization.py
     |-- 02_train_rf_kinect_only.py
-    |-- 03_test_videos.py
-    |-- app.py
-    |-- templates/
-    |   `-- index.html
-    `-- static/
-        |-- style.css
-        `-- generated/
-            `-- .gitkeep
+    `-- 03_test_videos.py
 ```
 
-## Yang tidak diunggah
+## Yang tidak disertakan
 
-- `dataset/` Kinect dan Vicon mentah.
-- `dataset_augmented_rf_xgb_fixed/` dan seluruh hasil augmentasi.
-- `Video/` dan video upload pengguna.
-- `.venv/`, cache Python, hasil keyframe, JSON pengujian, ZIP, dan backup.
-- Model atau data untuk `m02` Hurdle Step.
+- Dataset Vicon.
+- Gerakan selain `m01`, `m04`, `m05`, dan `m07`, terutama M02.
+- Folder video pengujian dan video upload pengguna.
+- `.venv`, cache Python, keyframe sementara, ZIP, dan backup.
 
-Dataset fitur `artifacts_uiprmd_fk/kinect_domain_randomized_features.csv` tetap
-disertakan karena dibutuhkan input adapter saat inferensi. File ini bukan dataset
-Kinect mentah dan ukurannya sekitar 28 MB.
-
-## Catatan training
-
-Script preprocessing dan training disimpan untuk dokumentasi/reproduksi kode.
-Untuk menjalankan training ulang, pengguna harus menyediakan sendiri dataset
-Kinect UI-PRMD dan membuat `augmented_index.csv`; keduanya sengaja tidak berada
-di repository deployment ini. Aplikasi dapat langsung berjalan menggunakan
-artefak model yang sudah tersedia tanpa training ulang.
+`artifacts_uiprmd_fk/kinect_domain_randomized_features.csv` adalah hasil
+preprocessing yang tetap dibutuhkan oleh input adapter ketika app melakukan
+inferensi. Dataset Kinect mentah digunakan hanya saat membangun ulang fitur.
