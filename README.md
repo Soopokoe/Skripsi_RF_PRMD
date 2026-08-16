@@ -49,8 +49,8 @@ Setelah selesai, jalankan langsung satu aplikasi:
 Python 3.12 wajib digunakan karena versi MediaPipe pada project ini menyediakan
 wheel Linux untuk Python 3.12. Dependensi JAX, SciPy, dan NumPy dikunci pada
 kombinasi yang sama dengan environment pengujian agar instalasi cloud konsisten.
-`packages.txt` hanya memasang `libgl1`; GLib memakai library bawaan image
-Streamlit agar tidak mencampur paket Debian Bullseye dan Trixie.
+`packages.txt` memakai `libgl1` dan `libglib2.0-0t64`, yaitu paket GLib untuk
+Debian Trixie yang menyediakan library `libgthread-2.0.so.0` bagi OpenCV.
 
 Instance lokal tetap dapat dijalankan dengan perintah di atas meskipun instance
 Streamlit Cloud sedang aktif.
