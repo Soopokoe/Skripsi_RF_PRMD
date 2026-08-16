@@ -28,7 +28,7 @@ Gunakan Python 3.12. Dari PowerShell pada root repository:
 Aplikasi Streamlit:
 
 ```powershell
-.\run_streamlit.ps1
+.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
 ```
 
 Buka `http://127.0.0.1:8501`.
@@ -36,7 +36,7 @@ Buka `http://127.0.0.1:8501`.
 Aplikasi Flask:
 
 ```powershell
-.\rf_kinect_domain_randomized\run_app.ps1
+.\.venv\Scripts\python.exe rf_kinect_domain_randomized\app.py
 ```
 
 Buka `http://127.0.0.1:5001`.
@@ -63,8 +63,6 @@ Skripsi_RF_PRMD/
 |-- .gitignore
 |-- setup_venv_windows.ps1
 |-- setup_venv_windows.bat
-|-- run_streamlit.ps1
-|-- run_streamlit.bat
 |-- streamlit_app.py
 |-- pose_pattern_utils.py
 |-- video_extractor.py
@@ -105,8 +103,6 @@ Skripsi_RF_PRMD/
     |-- 02_train_rf_kinect_only.py
     |-- 03_test_videos.py
     |-- app.py
-    |-- run_app.ps1
-    |-- run_app.bat
     |-- templates/
     |   `-- index.html
     `-- static/

@@ -57,13 +57,7 @@ repository agar dipakai bersama oleh aplikasi Flask dan Streamlit.
 Dari root project:
 
 ```powershell
-.\rf_kinect_domain_randomized\run_app.ps1
-```
-
-Atau klik dua kali:
-
-```text
-rf_kinect_domain_randomized\run_app.bat
+.\.venv\Scripts\python.exe rf_kinect_domain_randomized\app.py
 ```
 
 Kemudian buka `http://127.0.0.1:5001`. Model dan calibrator sudah tersedia di
