@@ -1,0 +1,254 @@
+{
+  "m01": {
+    "one_side": {
+      "rows": 200,
+      "subjects": 10,
+      "features": 240,
+      "threshold": 0.45966550239106485,
+      "raw_probability_median_correct": 0.7749424900828171,
+      "raw_probability_median_incorrect": 0.19010931836763065,
+      "accuracy": 0.8,
+      "balanced_accuracy": 0.8,
+      "confusion_matrix": [
+        [
+          79,
+          21
+        ],
+        [
+          19,
+          81
+        ]
+      ],
+      "selected_profile": "temporal_summary",
+      "profile_search": {
+        "temporal_summary": {
+          "balanced_accuracy": 0.8,
+          "threshold": 0.45966550239106485,
+          "features": 240
+        }
+      }
+    },
+    "standard": {
+      "rows": 500,
+      "subjects": 10,
+      "features": 240,
+      "threshold": 0.5531543644962048,
+      "raw_probability_median_correct": 0.8039708138847559,
+      "raw_probability_median_incorrect": 0.16212643068319066,
+      "accuracy": 0.864,
+      "balanced_accuracy": 0.8640000000000001,
+      "confusion_matrix": [
+        [
+          233,
+          17
+        ],
+        [
+          51,
+          199
+        ]
+      ],
+      "selected_profile": "temporal_summary",
+      "profile_search": {
+        "temporal_summary": {
+          "balanced_accuracy": 0.8640000000000001,
+          "threshold": 0.5531543644962048,
+          "features": 240
+        },
+        "summary_only": {
+          "balanced_accuracy": 0.858,
+          "threshold": 0.6035128604175659,
+          "features": 80
+        },
+        "temporal_summary_sparse": {
+          "balanced_accuracy": 0.86,
+          "threshold": 0.6148152464621586,
+          "features": 160
+        }
+      }
+    }
+  },
+  "m04": {
+    "one_side": {
+      "rows": 200,
+      "subjects": 10,
+      "features": 210,
+      "threshold": 0.4507862279155874,
+      "raw_probability_median_correct": 0.5947092308709667,
+      "raw_probability_median_incorrect": 0.32401730937637435,
+      "accuracy": 0.76,
+      "balanced_accuracy": 0.76,
+      "confusion_matrix": [
+        [
+          69,
+          31
+        ],
+        [
+          17,
+          83
+        ]
+      ],
+      "selected_profile": "temporal_summary",
+      "profile_search": {
+        "temporal_summary": {
+          "balanced_accuracy": 0.76,
+          "threshold": 0.4507862279155874,
+          "features": 210
+        }
+      }
+    },
+    "standard": {
+      "rows": 500,
+      "subjects": 10,
+      "features": 210,
+      "threshold": 0.5039877712979013,
+      "raw_probability_median_correct": 0.677969896446759,
+      "raw_probability_median_incorrect": 0.24064903193797516,
+      "accuracy": 0.786,
+      "balanced_accuracy": 0.786,
+      "confusion_matrix": [
+        [
+          199,
+          51
+        ],
+        [
+          56,
+          194
+        ]
+      ],
+      "selected_profile": "temporal_summary",
+      "profile_search": {
+        "temporal_summary": {
+          "balanced_accuracy": 0.786,
+          "threshold": 0.5039877712979013,
+          "features": 210
+        },
+        "summary_only": {
+          "balanced_accuracy": 0.77,
+          "threshold": 0.423786724414106,
+          "features": 70
+        },
+        "temporal_summary_sparse": {
+          "balanced_accuracy": 0.778,
+          "threshold": 0.5082684161935068,
+          "features": 140
+        }
+      }
+    }
+  },
+  "m05": {
+    "one_side": {
+      "rows": 200,
+      "subjects": 10,
+      "features": 210,
+      "threshold": 0.46698059498006195,
+      "raw_probability_median_correct": 0.7162631416686402,
+      "raw_probability_median_incorrect": 0.24256654165848526,
+      "accuracy": 0.79,
+      "balanced_accuracy": 0.79,
+      "confusion_matrix": [
+        [
+          76,
+          24
+        ],
+        [
+          18,
+          82
+        ]
+      ],
+      "selected_profile": "temporal_summary",
+      "profile_search": {
+        "temporal_summary": {
+          "balanced_accuracy": 0.79,
+          "threshold": 0.46698059498006195,
+          "features": 210
+        }
+      }
+    },
+    "standard": {
+      "rows": 300,
+      "subjects": 10,
+      "features": 210,
+      "threshold": 0.2919843414326037,
+      "raw_probability_median_correct": 0.7431839127402526,
+      "raw_probability_median_incorrect": 0.12914893353607632,
+      "accuracy": 0.8466666666666667,
+      "balanced_accuracy": 0.8466666666666667,
+      "confusion_matrix": [
+        [
+          109,
+          41
+        ],
+        [
+          5,
+          145
+        ]
+      ],
+      "selected_profile": "temporal_summary",
+      "profile_search": {
+        "temporal_summary": {
+          "balanced_accuracy": 0.8466666666666667,
+          "threshold": 0.2919843414326037,
+          "features": 210
+        }
+      }
+    }
+  },
+  "m07": {
+    "one_side": {
+      "rows": 200,
+      "subjects": 10,
+      "features": 140,
+      "threshold": 0.46556763427005987,
+      "raw_probability_median_correct": 0.5737710367938188,
+      "raw_probability_median_incorrect": 0.3892423364368592,
+      "accuracy": 0.75,
+      "balanced_accuracy": 0.75,
+      "confusion_matrix": [
+        [
+          67,
+          33
+        ],
+        [
+          17,
+          83
+        ]
+      ],
+      "selected_profile": "upper_body_cross_sensor",
+      "profile_search": {
+        "upper_body_cross_sensor": {
+          "balanced_accuracy": 0.75,
+          "threshold": 0.46556763427005987,
+          "features": 140
+        }
+      }
+    },
+    "standard": {
+      "rows": 300,
+      "subjects": 10,
+      "features": 140,
+      "threshold": 0.5291776827654263,
+      "raw_probability_median_correct": 0.7796939127339428,
+      "raw_probability_median_incorrect": 0.1310385528587733,
+      "accuracy": 0.9066666666666666,
+      "balanced_accuracy": 0.9066666666666667,
+      "confusion_matrix": [
+        [
+          132,
+          18
+        ],
+        [
+          10,
+          140
+        ]
+      ],
+      "selected_profile": "upper_body_cross_sensor",
+      "profile_search": {
+        "upper_body_cross_sensor": {
+          "balanced_accuracy": 0.9066666666666667,
+          "threshold": 0.5291776827654263,
+          "features": 140
+        }
+      }
+    }
+  }
+}

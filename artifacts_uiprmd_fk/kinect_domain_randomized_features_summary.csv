@@ -1,0 +1,17 @@
+exercise_code,view_mode,label_name,rows
+m01,one_side,Correct,100
+m01,one_side,Incorrect,100
+m01,standard,Correct,250
+m01,standard,Incorrect,250
+m04,one_side,Correct,100
+m04,one_side,Incorrect,100
+m04,standard,Correct,250
+m04,standard,Incorrect,250
+m05,one_side,Correct,100
+m05,one_side,Incorrect,100
+m05,standard,Correct,150
+m05,standard,Incorrect,150
+m07,one_side,Correct,100
+m07,one_side,Incorrect,100
+m07,standard,Correct,150
+m07,standard,Incorrect,150

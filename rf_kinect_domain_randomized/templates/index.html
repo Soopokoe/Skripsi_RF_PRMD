@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MotionLens RF — Analisis Gerakan Kinect-only</title>
+  <meta name="description" content="Analisis gerakan video dengan Random Forest yang dilatih hanya dari Kinect.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">RF · Kinect-only · MediaPipe inference</p>
+        <h1>MotionLens <span>RF</span></h1>
+        <p class="intro">Unggah video gerakan. Sistem memilih sisi tubuh yang paling terlihat, memisahkan repetisi, lalu menilai setiap pola menggunakan Random Forest Kinect domain-randomized.</p>
+      </div>
+      <div class="model-chip"><i></i> Model siap digunakan</div>
+    </header>
+
+    <section class="workspace">
+      <form class="upload-card" method="post" enctype="multipart/form-data">
+        <div class="section-heading">
+          <span class="step">01</span>
+          <div><h2>Pilih gerakan dan video</h2><p>Gunakan video dengan seluruh tubuh terlihat.</p></div>
+        </div>
+
+        <label for="exercise">Jenis gerakan</label>
+        <select id="exercise" name="exercise" required>
+          {% for code, name in exercises.items() %}
+          <option value="{{ code }}" {% if selected_exercise == code %}selected{% endif %}>{{ code|upper }} — {{ name }}</option>
+          {% endfor %}
+        </select>
+
+        <label class="dropzone" for="video">
+          <input id="video" name="video" type="file" accept="video/mp4,video/avi,video/quicktime,video/x-matroska,video/webm" required>
+          <span class="drop-icon">↥</span>
+          <strong id="file-name">Klik untuk memilih video</strong>
+          <small>MP4, AVI, MOV, MKV, atau WEBM · maksimal 250 MB</small>
+        </label>
+
+        <button type="submit"><span>Analisis dengan Random Forest</span><b>→</b></button>
+        <p class="privacy">Video diproses lokal dan file sementara dihapus setelah analisis.</p>
+      </form>
+
+      <aside class="explain-card">
+        <span class="step">02</span>
+        <h2>Apa yang dinilai?</h2>
+        <div class="flow">
+          <div><b>MediaPipe</b><span>Landmark dan visibility</span></div>
+          <div><b>Segmentasi</b><span>Repetisi gerakan</span></div>
+          <div><b>Random Forest</b><span>Pola Kinect sintetis</span></div>
+          <div><b>Kalibrasi</b><span>Threshold antar-subjek</span></div>
+        </div>
+        <p class="method-note">Video tidak digunakan untuk melatih model atau menurunkan threshold.</p>
+      </aside>
+    </section>
+
+    {% if error %}
+    <section class="alert error"><strong>Analisis belum berhasil</strong><span>{{ error }}</span></section>
+    {% endif %}
+
+    {% if result %}
+    <section class="result-section">
+      <div class="result-head">
+        <div>
+          <p class="eyebrow">Hasil analisis · {{ result.exercise_code|upper }}</p>
+          <h2>{{ result.exercise_name }}</h2>
+          <p>{{ result.video_name }}</p>
+        </div>
+        <div class="status {{ result.status|lower }}">
+          <small>Keputusan RF</small>
+          <strong>{{ result.status }}</strong>
+          {% if result.near_threshold %}<span>Dekat threshold</span>{% endif %}
+        </div>
+      </div>
+
+      {% if result.warning %}
+      <div class="alert warning"><strong>Perlu perhatian</strong><span>{{ result.warning }}</span></div>
+      {% endif %}
+
+      <div class="metrics-grid">
+        <article><span>Probabilitas Correct</span><strong>{{ "%.1f"|format(result.median_probability * 100) }}%</strong><div class="meter"><i style="width: {{ result.median_probability * 100 }}%"></i><em style="left: {{ result.threshold * 100 }}%"></em></div></article>
+        <article><span>Threshold Kinect</span><strong>{{ "%.3f"|format(result.threshold) }}</strong><small>Selisih {{ "%+.3f"|format(result.margin) }}</small></article>
+        <article><span>Mode kamera</span><strong>{{ result.mode_label }}</strong><small>Sisi dominan: {{ result.dominant_side }}</small></article>
+        <article><span>Deteksi pose</span><strong>{{ "%.1f"|format(result.pose_detection_ratio * 100) }}%</strong><small>{{ result.detected_frames }} dari {{ result.total_frames }} frame</small></article>
+      </div>
+
+      <div class="repetition-card">
+        <div class="section-heading compact"><span class="step">03</span><div><h2>Hasil per repetisi</h2><p>{{ result.repetitions|length }} repetisi berhasil dianalisis.</p></div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Repetisi</th><th>Frame</th><th>P(Correct)</th><th>Threshold</th><th>Hasil</th></tr></thead>
+            <tbody>
+              {% for rep in result.repetitions %}
+              <tr>
+                <td>#{{ rep.number }}</td><td>{{ rep.start }}–{{ rep.end }}</td>
+                <td>{{ "%.1f"|format(rep.probability * 100) }}%</td><td>{{ "%.3f"|format(rep.threshold) }}</td>
+                <td><span class="mini-status {{ rep.status|lower }}">{{ rep.status }}{% if rep.near_threshold %} · dekat batas{% endif %}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="evidence-section">
+        <div class="section-heading compact">
+          <span class="step">04</span>
+          <div>
+            <h2>Potongan gerakan krusial</h2>
+            <p>{{ result.visual_focus_text }} Badge di bawah adalah pemeriksaan geometri yang transparan, bukan prediksi RF per frame.</p>
+          </div>
+        </div>
+        {% for rep in result.repetitions %}
+          {% if rep.evidence %}
+          <div class="evidence-repetition">
+            <div class="evidence-title"><strong>Repetisi #{{ rep.number }}</strong><span>RF sekuens: {{ rep.status }} · {{ "%.1f"|format(rep.probability * 100) }}%</span></div>
+            <div class="evidence-grid">
+              {% for item in rep.evidence %}
+              <article class="evidence-card">
+                <div class="evidence-image"><img src="{{ item.image_url }}" alt="{{ item.phase }} repetisi {{ rep.number }}"></div>
+                <div class="evidence-copy">
+                  <div class="evidence-meta"><span>{{ item.phase }}</span><small>frame {{ item.source_frame }}</small></div>
+                  <strong class="visual-status {{ item.tone }}">{{ item.assessment }}</strong>
+                  <p>{{ item.detail }}</p>
+                  <div class="angle-list">
+                    {% for label, value in item.metrics.items() %}<span>{{ label }} <b>{{ value }}</b></span>{% endfor %}
+                  </div>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <details>
+        <summary>Detail teknis</summary>
+        <div class="technical-grid">
+          <span>Profil fitur <b>{{ result.feature_profile }}</b></span>
+          <span>Mode model <b>{{ result.mode }}</b></span>
+          <span>Rasio satu sisi <b>{{ "%.1f"|format(result.one_side_ratio * 100) }}%</b></span>
+          <span>Fitur dimask <b>{{ result.masked_features|length }}</b></span>
+          <span class="wide-detail">Cakupan model <b>{{ result.feature_bases|join(', ') }}</b></span>
+          <span class="wide-detail">Tubuh atas yang masih dipakai <b>{{ result.upper_body_features|join(', ') if result.upper_body_features else 'tidak ada' }}</b></span>
+        </div>
+      </details>
+    </section>
+    {% endif %}
+
+    <footer>Random Forest dilatih dari Kinect Correct + Incorrect dengan domain randomization.</footer>
+  </main>
+  <script>
+    const input = document.getElementById('video');
+    const name = document.getElementById('file-name');
+    input?.addEventListener('change', () => { name.textContent = input.files?.[0]?.name || 'Klik untuk memilih video'; });
+  </script>
+</body>
+</html>
